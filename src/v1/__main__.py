@@ -10,22 +10,25 @@ from getpass import getpass as gp
 
 global current_user
 current_user = ""
-if not os.path.exists('C:\\pw.json'):
-    with open('C:\\pw.json', 'w') as file:
-        json.dump({"path":""}, file, indent = 4)
-    print("Edit the path to store files at in C:\\pw.json")
 
-path2 = ""
-with open("C:\\pw.json", 'r') as file:
-    path2 = json.load(file)['path']
-path =  path2+"\\data\\data.json"
+if not os.path.exists("path.json"):
+    with open('path.json', 'w') as file:
+        json.dump({
+            'path':''
+        }, file)
+    raise Exception("edit path.json")
+    
+with open("path.json", "r") as file:
+    path3 = json.load(file)['path']
 
-if not os.path.exists(path):
+path2 = os.path.join(path3, "data")
+path = path2 + "/data.json"
 
-    os.mkdir(path2+"\\data")
-    with open(path, 'w+') as fp:
-        json.dump({},fp)
-
+if not os.path.exists(path2):
+    os.mkdir(path2)
+    with open(path, 'w') as file:
+        json.dump({}, file)
+    
 def fecthAllData():
     data  = None
     with open(path, "r") as file:
@@ -205,7 +208,6 @@ def askForNewPassword():
                 addPassword(username, password, email, siteusername, sitename)
                 print("Password successfully aded to the database")
                 break
-
 
 
 def login(user):
