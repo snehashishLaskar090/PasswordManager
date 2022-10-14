@@ -7,7 +7,6 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# apiurl = "http://snehashishlaskar090.pythonanywhere.com/"
 apiurl= 'http://127.0.0.1:8000/'
 
 def convertUserDataToJson(username):
@@ -42,7 +41,7 @@ def login():
                     session['password'] = psword
                     return redirect('/home')
         
-            return render_template('login.html', error=True)
+            return render_template('new_login.html', error=True)
 
         else:
             return redirect('/home')
@@ -60,7 +59,7 @@ def login():
         if user == None and pw == None:
 
 
-            return render_template('login.html')
+            return render_template('new_login.html')
 
         else:
             return redirect('/home')
@@ -118,7 +117,7 @@ def signup():
         if user != None and pw != None:
             return redirect('/home')
         else:
-            return render_template('signup.html')       
+            return render_template('new_signup.html')       
 
 
 # Snehashish Laskar

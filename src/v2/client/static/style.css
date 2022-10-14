@@ -142,3 +142,7 @@ tr th:nth-last-of-type(2) {
   background: #28A745;
   color: white;
 }
+
+#pagelink {
+  margin-left: 10px;
+}

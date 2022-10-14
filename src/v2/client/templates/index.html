@@ -4,12 +4,12 @@
 {% block header %}
 <style>
     body {
-        background: #343a40;
+        background: #f5f5f5;
     }
     .title {
         font-weight: 100;
         font-size: 80px;
-        color: white;
+        color: #191919;
     }
 
     #check {
@@ -18,18 +18,12 @@
         border: 1px #191919 solid;
         width: 30%;
         padding:10px;
-        background:none;
-        color:white;
         font-size:20px;
         outline:none;
         border:none;
         border-radius: 20px;
         margin-top:2rem;
         box-shadow: 1px 1px 20px rgba(51,221,255,0.3);
-    }
-
-    .content a:hover{
-        background: rgba(51,221,255,0.9);
     }
 
     .content a:hover{
@@ -42,6 +36,9 @@
         left: 50%;
         transform: translate(-50% , -50%);
         width:auto;
+        background-color: #fff;
+        padding: 50px;
+        border-radius: 20px;
     }
 </style>
 {% endblock %}
@@ -49,7 +46,7 @@
 {% block content %}
 <div class = "content">
     <h1 class = 'title' >Manage Your Passwords</h1>
-    <a class="btn btn-success" id = "check" href="/auth" role="button">Check It Out!</a>
+    <a class="btn btn-primary" id = "check" href="/auth" role="button">Check It Out!</a>
 </div>
 
 {% endblock %}
