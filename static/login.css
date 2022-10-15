@@ -1,0 +1,99 @@
+.form__input{
+  width : 15rem;
+  margin: 1rem;
+  padding: 15px;
+  font-size: 20px;
+  border: 0px;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, #2ecc71, rgb(58, 123, 213));
+  border-image-slice: 1;
+  background:none;
+  text-align: center;
+  color:white;
+  overflow: hidden
+}
+
+body input[type="text"]:focus, body input[type="password"]:focus{
+  outline:none;
+  background:none;
+  color:white;
+
+
+}
+body input[type="text"]:hover, body input[type="password"]:hover{
+  outline:none;
+  background:none;
+  color:white;
+  width:244px;
+
+}
+
+body input[type="submit"]:hover{
+  cursor: pointer;
+  width: 16rem;
+  background-image: linear-gradient(to right,#2ecc71,#3498db );
+}
+.grid {
+  background:#191919;
+  padding: 5rem;
+  position:fixed;
+  justify-content: center;
+  text-align: center;
+  display: block;
+  position: absolute;
+  top: 20%;
+  border-radius: 50px;;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-30%);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(2);
+  overflow: hidden
+}
+
+.form__button {
+  width: 15rem;
+  margin: 20px;
+  padding:15px;
+  font-size: 20px;
+  font-weight: 100;
+  color:white;
+  border: 1px #191919 solid;
+  background:none;
+  outline: none;
+  border: 0px;
+  background-image: linear-gradient(to left,#2ecc71,#3498db );
+  border-radius: 20px;
+
+}
+
+.form__field label{
+  font-family: 'Brush Script MT', sans-serif;
+}
+
+body p{
+  font-family: 'Brush Script MT', sans-serif;
+  color: white;
+}
+
+body{
+  background-image: linear-gradient(to left, #2ecc71, #3498db);
+}
+
+body input[type="text"]:-webkit-autofill,input[type="text"]:-webkit-autofill:hover{
+  background: none;
+  outline:none;
+  border:none;
+}
+
+body input[type="password"]:-webkit-autofill, input[type="password"]:-webkit-autofill:hover {
+  background: none;
+  outline:none;
+  border:none;
+}
+
+#login__username:autofill{
+  background: none;
+  outline:none;
+  border:none;
+}
