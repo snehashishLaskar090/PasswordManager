@@ -50,7 +50,7 @@ def addUser(username, password):
     return listAllAuthData()
 
 def selectiveUsername(username):
-    query = """SELECT * FROM AUTHDATA WHERE username =:username """
+    query = """SELECT password FROM AUTHDATA WHERE username =:username """
     authcursor.execute(query, {'username':username})
     return authcursor.fetchall()
 
@@ -110,3 +110,4 @@ def deleteUser(username):
     
 startup()
 init_auth_table()
+print(selectiveUsername('snehashish'))
