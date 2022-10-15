@@ -26,7 +26,6 @@ def login():
 
         try:
             user = session['username']
-            pw = session['password']
         except:
             pass
 
@@ -41,7 +40,6 @@ def login():
                 print(usrname, psword)
                 if i[0] == usrname and i[1] == psword:
                     session['username'] = usrname
-                    session['password'] = psword
                     return redirect('/home')
         
             return render_template('login.html', error=True)
@@ -55,7 +53,6 @@ def login():
 
         try:
             user = session['username']
-            pw = session['password']
         except:
             pass
 
@@ -71,9 +68,7 @@ def login():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session['username'] = None
-    session['password'] = None
     print(session['username'])
-    print(session['password'])
     return redirect('/auth')
 
 @app.route('/delete', methods=['POST','GET'])
@@ -88,7 +83,6 @@ def signup():
 
         try:
             user = session['username']
-            pw = session['password']
         except:
             pass
 
@@ -106,7 +100,6 @@ def signup():
                         apiurl,username, password
                     ))
                     session['username'] = username
-                    session['password'] = password
 
                     return redirect('/auth')
 
@@ -119,7 +112,6 @@ def signup():
 
         try:
             user = session['username']
-            pw = session['password']
         except:
             pass
 
@@ -165,7 +157,8 @@ def home():
 
 @app.route('/cookies', methods = ['GET', 'POST'])
 def cook():
-    return jsonify([session['username'], session['password']])
+    return jsonify(session['username'])
+    
 @app.route('/', methods = ['GET', 'POST'])
 def main():
 
@@ -174,11 +167,10 @@ def main():
 
     try:
         user = session['username']
-        pw = session['password']
     except:
         pass
 
-    if user != None and pw != None:
+    if user != None:
         return render_template('index.html', sess = True)
     else:
         return render_template('index.html', sess = False)
