@@ -68,20 +68,18 @@ def delsite():
             return str(ex)
 
 
-@api.route('/delete', methods=['POST'])
-def deleteUser():
+@api.route('/delete', methods=['DELETE'])
+def deleteuser():
 
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         try:
             username = request.args['username']
-            deleteuser(username)
+            deleteUser(username)
             
             return jsonify(convertUserDataToJson(request.args['username'])) 
-
         except Exception as ex:
             return str(ex)
 
 
-# if __name__ == "__main__":
-#     api.run(debug=True, host = "0.0.0.0", port = 8000)
-
+if __name__ == '__main__':
+    api.run(debug=True, host = '0.0.0.0', port=8000)

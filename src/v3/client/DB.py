@@ -3,8 +3,8 @@ import os
 from pathlib import Path
 
 
-path = os.path.join(Path(__file__).parent, "data")
-
+path = os.path.join((Path(__file__).parent).parent, "data")
+print(path)
 def startup():
 
     if not os.path.exists(path + "/authdata.db"):
@@ -98,17 +98,16 @@ def deletesite(username, site):
     datacursor.execute(query, {'site': site})
     dataconn.commit()
 
-def deleteuser(username):
-    query = f"DELETE FROM AUTHDATA WHERE username=:user"
-    authcursor.execute(query, {'user':username})
-    authconn.commit()
-
+def deleteUser(username):
     query = f"DROP TABLE {username}"
     datacursor.execute(query)
     dataconn.commit()
 
-
-
+    query2 = f"DELETE FROM AUTHDATA WHERE username=:uname"
+    authcursor.execute(query2, {'uname':username})
+    authconn.commit()
 startup()
 init_auth_table()
+deleteUser('kabir')
+
 

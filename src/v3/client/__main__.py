@@ -7,14 +7,15 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-apiurl = "http://snehashishlaskar090.pythonanywhere.com/"
-# apiurl = "http://127.0.0.1:8000/"
-
+# apiurl = "http://snehashishlaskar090.pythonanywhere.com/"
+apiurl= 'http://127.0.0.1:8000/'
 
 def convertUserDataToJson(username):
     data = requests.get('{}sites?username={}'.format(apiurl, username)).json()
 
     return data
+
+
 @app.route('/auth', methods=['GET', 'POST'])
 def login():
 
@@ -73,14 +74,11 @@ def logout():
     session['password'] = None
     print(session['username'])
     print(session['password'])
-    return redirect('/')
+    return redirect('/auth')
 
 @app.route('/delete', methods=['POST','GET'])
 def delete():
-    if request.method == 'POST':
-        return redirect('/deleteusersure')
-    else:
-        return render_template('delete_account.html', sess=True)
+    return render_template('delete_account.html', sess=True)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -97,14 +95,20 @@ def signup():
         if user == None and pw == None:
             username = request.form['username']
             password = request.form['password']
+            try:
+                convertUserDataToJson(username)
+                return render_template('signup.html', msg = "User Already Exists!")
+            except:
+                if len(password) < 8:
+                    return render_template('signup.html', msg = "Please select a password more than 8 digits!")
+                else:
+                    query = requests.post('{}createuser?username={}&password={}'.format(
+                        apiurl,username, password
+                    ))
+                    session['username'] = username
+                    session['password'] = password
 
-            query = requests.post('{}createuser?username={}&password={}'.format(
-                apiurl,username, password
-            ))
-            session['username'] = username
-            session['password'] = password
-
-            return redirect('/auth')
+                    return redirect('/auth')
 
         else:
             return redirect('/home')
@@ -122,7 +126,7 @@ def signup():
         if user != None and pw != None:
             return redirect('/home')
         else:
-            return render_template('signup.html')       
+            return render_template('signup.html', msg = "")       
 
 
 # Snehashish Laskar
@@ -182,9 +186,9 @@ def main():
 @app.route('/deleteusersure', methods=["GET", "POST"])
 def deleteUser():
 
-    req = requests.post(f"{apiurl}delete?username={session['username']}")
-    print(req)
+    requests.delete(f"{apiurl}delete?username={session['username']}")
     return redirect('/logout')
 
-# if __name__ == "__main__":
-#     app.run(debug=True, host = "0.0.0.0", port=80)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=80)
