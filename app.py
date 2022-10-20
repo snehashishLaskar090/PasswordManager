@@ -18,7 +18,7 @@ Session(app)
 # configuration of mail
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'snehashish.laskar@sahyadrischool.org'
+app.config['MAIL_USERNAME'] = 'snehashish.laskar@sahyadrischool.orf'
 app.config['MAIL_PASSWORD'] = 'snehashish08036'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
@@ -141,7 +141,7 @@ def signup():
                             recipients=[email]
                         ) 
                         msg.body = render_template('email.html', username = username, link = f'https://snehashish08036.pythonanywhere.com/confirm/{token}')
-                        msg.html = render_template('email.html', username = username, link = f'http://snehashsih08036.pythonanywhere.com/confirm/{token}')
+                        msg.html = render_template('email.html', username = username, link = f'http://snehashish08036.pythonanywhere.com/confirm/{token}')
                         mail.send(msg)
                         return render_template('confirm.html')
                     except Exception as ex:
@@ -258,5 +258,5 @@ def email():
     except Exception as ex:
         return str(ex)
 
-# if __name__ == '__main__':
-#     app.run(debug=True, host='0.0.0.0', port=80)
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=80)
