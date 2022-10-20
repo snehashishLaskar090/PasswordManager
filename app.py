@@ -18,7 +18,7 @@ Session(app)
 # configuration of mail
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'snehashish.laskar@sahyadrischool.orf'
+app.config['MAIL_USERNAME'] = 'snehashish.laskar@sahyadrischool.org'
 app.config['MAIL_PASSWORD'] = 'snehashish08036'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
@@ -107,6 +107,7 @@ def signup():
             pass
 
         if user == None and pw == None:
+        
             username = request.form['username']
             usrName = username
             password = request.form['password']
@@ -120,6 +121,12 @@ def signup():
                 if len(password) < 8:
                     return render_template('signup.html', msg = "Please select a password more than 8 digits!")
                 else:
+                    with open(path+'creds.json') as file:
+                        data = json.load(file)
+                    with open(path+'creds.json', 'w') as file:
+                        data['username'] = username
+                        data['password'] = password
+                        json.dump(data, file)
 
                     token = str(token_urlsafe(16))
                     if os.path.exists(path+'tokens.json'):
@@ -133,6 +140,8 @@ def signup():
 
                     with open(path+'tokens.json', 'w') as file:
                         json.dump(data, file)
+                    
+                    
 
                     try:
                         msg = Message(
@@ -232,12 +241,18 @@ def confirm(token):
 
     with open(path+'tokens.json') as file:
         data = json.load(file)
-
+    with open(path+'creds.json') as file:
+        data2 = json.load(file)
     if token in data:
         query = requests.post('{}createuser?username={}&password={}'.format(
-                apiurl,usrName, psword
+                apiurl,data2['username'], data2['password']
             ))
-        session['username'] = usrName
+        session['username'] = data2['username']
+        data2['username'] = ''
+        data2['password'] = ''
+        with open(path+'creds.json', 'w') as file:
+            json.dump(data2, file)
+
         return redirect('/home')
     else:
         return redirect('/signup')
