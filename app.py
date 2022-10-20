@@ -1,14 +1,34 @@
 from flask import *
 from flask_session import Session
+from flask_mail import Mail, Message
 import requests
+from secrets import token_urlsafe
+import json 
+from pathlib import Path
+import os
 
 app = Flask(__name__)
+path = str(Path(__file__).parent) + '/'
+print(path)
+
 app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# apiurl = "http://snehashishlaskar090.pythonanywhere.com/"
-apiurl= 'http://127.0.0.1:8000/'
+# configuration of mail
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'snehashish.laskar@sahyadrischool.org'
+app.config['MAIL_PASSWORD'] = 'snehashish08036'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
+apiurl = "http://snehashishlaskar090.pythonanywhere.com/"
+# apiurl= 'http://127.0.0.1:8000/'
+usrName = None
+psword = None
+
 
 def convertUserDataToJson(username):
     data = requests.get('{}sites?username={}'.format(apiurl, username)).json()
@@ -88,7 +108,11 @@ def signup():
 
         if user == None and pw == None:
             username = request.form['username']
+            usrName = username
             password = request.form['password']
+            psword = password
+
+            email = request.form['email']
             try:
                 convertUserDataToJson(username)
                 return render_template('signup.html', msg = "User Already Exists!")
@@ -96,12 +120,32 @@ def signup():
                 if len(password) < 8:
                     return render_template('signup.html', msg = "Please select a password more than 8 digits!")
                 else:
-                    query = requests.post('{}createuser?username={}&password={}'.format(
-                        apiurl,username, password
-                    ))
-                    session['username'] = username
 
-                    return redirect('/auth')
+                    token = str(token_urlsafe(16))
+                    if os.path.exists(path+'tokens.json'):
+                        with open(path+'tokens.json', 'w') as file:
+                            json.dump([], file)
+
+                    with open(path+'tokens.json') as file:
+                        data = json.load(file)
+
+                    data.append(token)
+
+                    with open(path+'tokens.json', 'w') as file:
+                        json.dump(data, file)
+
+                    try:
+                        msg = Message(
+                            'Confirmation Email',
+                            sender='snehashish.laskar@gmail.com',
+                            recipients=[email]
+                        ) 
+                        msg.body = render_template('email.html', username = username, link = f'https://snehashish08036.pythonanywhere.com/confirm/{token}')
+                        msg.html = render_template('email.html', username = username, link = f'http://snehashsih08036.pythonanywhere.com/confirm/{token}')
+                        mail.send(msg)
+                        return render_template('confirm.html')
+                    except Exception as ex:
+                        return str(ex)
 
         else:
             return redirect('/home')
@@ -182,5 +226,37 @@ def deleteUser():
     return redirect('/logout')
 
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+
+@app.route('/confirm/<token>', methods=['GET'])
+def confirm(token):
+
+    with open(path+'tokens.json') as file:
+        data = json.load(file)
+
+    if token in data:
+        query = requests.post('{}createuser?username={}&password={}'.format(
+                apiurl,usrName, psword
+            ))
+        session['username'] = usrName
+        return redirect('/home')
+    else:
+        return redirect('/signup')
+
+@app.route('/email', methods=['GET'])
+def email():
+    try:
+        msg = Message(
+            'Your Son',
+            sender='snehashish.laskar@gmail.com',
+            recipients=['snehashish.laskar@sahyadrischool.org', 'snehashish.laskar@gmail.com']
+        )
+
+        msg.body = render_template('email.html', username = 'Snehashish', link = 'https://snehashish08036.pythonanywhere.com/')
+        msg.html = render_template('email.html', username = 'Snehashish', link = 'https://snehashish08036.pythonanywhere.com/')
+        mail.send(msg)
+        return render_template('confirm.html')
+    except Exception as ex:
+        return str(ex)
+
+# if __name__ == '__main__':
+#     app.run(debug=True, host='0.0.0.0', port=80)
