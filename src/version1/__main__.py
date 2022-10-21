@@ -1,5 +1,6 @@
 # Author : Snehashish Laksar
 # Date   : 13-04-2022
+# This file is a command line application
 
 # Importing necessary modules
 import json
